@@ -6,8 +6,9 @@ import org.springframework.stereotype.Repository;
 import io.github.gilmardev.registrousuario.dto.UsuarioDTO;
 
 @Repository
-public interface UsuarioRepository extends JpaRepository<UsuarioDTO, Long> {
-
+public interface UsuarioRepository extends JpaRepository<UsuarioDTO, Long>{
+	
 	UsuarioDTO findByNome(String nome);
+	UsuarioDTO findById(Long id);
 
 }
