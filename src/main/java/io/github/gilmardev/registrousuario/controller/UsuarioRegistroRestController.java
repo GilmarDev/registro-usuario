@@ -41,34 +41,53 @@ public class UsuarioRegistroRestController {
 	@GetMapping("/")
 	public ResponseEntity<List<UsuarioDTO>> listarAllUsuario() {
 		List<UsuarioDTO> usuarios = usuarioRepository.findAll();
+		if(usuarios.isEmpty()) {
+			return new ResponseEntity<List<UsuarioDTO>>(HttpStatus.NO_CONTENT);
+		}
+		
 		return new ResponseEntity<List<UsuarioDTO>>(usuarios, HttpStatus.OK);
 
 	}
-
-	@PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<UsuarioDTO> criarUsuario(@RequestBody final UsuarioDTO usuario) {
-		usuarioRepository.save(usuario);
-		return new ResponseEntity<UsuarioDTO>(usuario, HttpStatus.CREATED);
-	}
-
+	
+	//método para obter o usuário por id
 	@GetMapping("/{id}")
 	public ResponseEntity<UsuarioDTO> buscarUsuarioById(@PathVariable("id") final Long id) {
 		UsuarioDTO usuario = usuarioRepository.findById(id);
 		if (usuario == null) {
-			return new ResponseEntity<UsuarioDTO>(new TipoErroPersonalizado("Usuário com id " 
-																		+ id + 
-																			" não encontrado"),
-																			HttpStatus.NOT_FOUND);
+				return new ResponseEntity<UsuarioDTO>(
+					new TipoErroPersonalizado("Usuário com id " 
+					+ id + " não encontrado"),HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<UsuarioDTO>(usuario, HttpStatus.OK);
 	}
+	
+	// método para criar um usuário
+	@PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<UsuarioDTO> criarUsuario(@RequestBody final UsuarioDTO usuario) {
+			if(usuarioRepository.findByNome(usuario.getNome())!= null) {
+					return new ResponseEntity<UsuarioDTO>(new TipoErroPersonalizado(
+					"Não foi possível criar um novo usuário. Um usuário com nome"
+					+ usuario.getNome() + " já existe."), HttpStatus.CONFLICT);
+				
+			}
+		
+			usuarioRepository.save(usuario);
+			return new ResponseEntity<UsuarioDTO>(usuario, HttpStatus.CREATED);
+	}
 
+
+	// método para atualizar um usuário existente
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<UsuarioDTO> atualizarUsuario(
-			@PathVariable("id") final Long id,@RequestBody UsuarioDTO usuario) {
+			@PathVariable("id") final Long id, @RequestBody UsuarioDTO usuario) {
 
-		// buscar o usuário com base no id e configurá-lo para o objeto atualUsuario do tipo UsuarioDTO
+		// buscar o usuário com base no id e configurá-lo para o objeto atualizarUsuario do tipo UsuarioDTO
 		UsuarioDTO atualizarUsuario = usuarioRepository.findById(id);
+		if(atualizarUsuario == null) {
+			 return new ResponseEntity<UsuarioDTO>(
+					 new TipoErroPersonalizado("Não foi possível atualizar o usuario pelo id"
+							+ id + "não encontrado. "), HttpStatus.NOT_FOUND);
+		}
 
 		// atualizar os dados do objeto atualizarUsuario com os dados do objeto do usuário
 		atualizarUsuario.setNome(usuario.getNome());
@@ -84,8 +103,16 @@ public class UsuarioRegistroRestController {
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<UsuarioDTO> excluirUsuario(@PathVariable("id") final Long id) {
+		UsuarioDTO usuario = usuarioRepository.findById(id);
+		if(usuario == null) {
+				return new ResponseEntity<UsuarioDTO>(
+						new TipoErroPersonalizado("Não foi possivel excluir usuario com id "
+								+ id + "não econtrado "), HttpStatus.NOT_FOUND);
+		}
 		usuarioRepository.deleteById(id);
-		return new ResponseEntity<UsuarioDTO>(HttpStatus.NO_CONTENT);
+		return new ResponseEntity<UsuarioDTO>(
+				new TipoErroPersonalizado("Usuario excluido com id"
+				+ id + "."	),HttpStatus.NO_CONTENT);
 	}
 
 }
