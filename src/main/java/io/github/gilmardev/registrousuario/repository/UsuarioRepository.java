@@ -9,6 +9,6 @@ import io.github.gilmardev.registrousuario.dto.UsuarioDTO;
 public interface UsuarioRepository extends JpaRepository<UsuarioDTO, Long>{
 	
 	UsuarioDTO findByNome(String nome);
-	//UsuarioDTO findById(Long id);
+	UsuarioDTO findById(Long id);
 
 }

@@ -6,6 +6,8 @@ import io.github.gilmardev.registrousuario.exception.TipoErroPersonalizado;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,9 +65,14 @@ public class UsuarioRegistroRestController {
 	
 	// método para criar um usuário
 	@PostMapping(value = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<UsuarioDTO> criarUsuario(@RequestBody final UsuarioDTO usuario) {
+	public ResponseEntity<UsuarioDTO> criarUsuario(
+					@Valid @RequestBody final UsuarioDTO usuario) {
+			logger.info("criando usuário: {}", usuario );
 			if(usuarioRepository.findByNome(usuario.getNome())!= null) {
-					return new ResponseEntity<UsuarioDTO>(new TipoErroPersonalizado(
+			logger.error("Não foi possível criar usuário com nome {} já existe",
+					                      usuario.getNome());
+				    return new ResponseEntity<UsuarioDTO>(
+				    		new TipoErroPersonalizado(
 					"Não foi possível criar um novo usuário. Um usuário com nome"
 					+ usuario.getNome() + " já existe."), HttpStatus.CONFLICT);
 				
