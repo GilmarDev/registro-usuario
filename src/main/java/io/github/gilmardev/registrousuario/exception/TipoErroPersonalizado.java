@@ -10,6 +10,7 @@ public class TipoErroPersonalizado extends UsuarioDTO {
 		this.erroMensagem = erroMensagem;
 	}
 	
+	
 	public String getErroMensagem() {
 		return erroMensagem;
 	}

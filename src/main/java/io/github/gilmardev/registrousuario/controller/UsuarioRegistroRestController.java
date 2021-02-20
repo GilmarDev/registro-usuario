@@ -101,6 +101,7 @@ public class UsuarioRegistroRestController {
 		return new ResponseEntity<UsuarioDTO>(atualizarUsuario, HttpStatus.OK);
 	}
 
+	// deleta um usuário existente
 	@DeleteMapping("/{id}")
 	public ResponseEntity<UsuarioDTO> excluirUsuario(@PathVariable("id") final Long id) {
 		UsuarioDTO usuario = usuarioRepository.findById(id);
@@ -112,7 +113,7 @@ public class UsuarioRegistroRestController {
 		usuarioRepository.deleteById(id);
 		return new ResponseEntity<UsuarioDTO>(
 				new TipoErroPersonalizado("Usuario excluido com id"
-				+ id + "."	),HttpStatus.NO_CONTENT);
+				+ id + "."), HttpStatus.NO_CONTENT);
 	}
 
 }
