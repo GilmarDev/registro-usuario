@@ -34,3 +34,7 @@ public class ErroValidacaoCampo {
 	}
 
 }
+
+/*
+ * public enum MessageType { SUCCESS, INFO, WARNING, ERROR }
+ */
