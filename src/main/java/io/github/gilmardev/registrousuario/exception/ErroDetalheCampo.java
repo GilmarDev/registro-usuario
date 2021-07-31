@@ -12,7 +12,7 @@ public class ErroDetalheCampo {
 	private long erroTimeStamp;
 	private String erroPath;
 	private String erroMensagemDesenvolvedor;
-	private Map<String, List<ErroDetalheCampo>> erros = new HashMap<String, List<ErroDetalheCampo>>();
+	private Map<String, List<ErroValidacaoCampo>> erros = new HashMap<String, List<ErroValidacaoCampo>>();
 
 	public String getErroTitulo() {
 		return erroTitulo;
@@ -62,12 +62,12 @@ public class ErroDetalheCampo {
 		this.erroMensagemDesenvolvedor = erroMensagemDesenvolvedor;
 	}
 
-	public Map<String, List<ErroDetalheCampo>> getErros() {
-		return erros;
-	}
+  public Map<String, List<ErroValidacaoCampo>> getErros() {
+    return erros;
+  }
 
-	public void setErros(Map<String, List<ErroDetalheCampo>> erros) {
-		this.erros = erros;
-	}
-
+  public void setErros(Map<String, List<ErroValidacaoCampo>> erros) {
+    this.erros = erros;
+  }
+	
 }
